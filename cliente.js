@@ -1,19 +1,28 @@
-function descargar(url,info,fun){
+function descargar(url,tipo,info,fun){
+	var tmin = tipo.toString().toLowerCase()
 	fetch(url, {
 		method: "POST",
-		headers: {"Content-Type": "application/x-www-form-urlencoded"},
+		headers: {
+			"Content-Type": 'application/x-www-form-urlencoded; charset="utf-8"'
+		},
 		body: `info=${encodeURIComponent(info)}`
-	}).then(x=>x.text())
+	}).then(x=>x[
+		tmin=="text"?"text"
+		:tmin=="blob"?"blob"
+		:tmin=="1"?"text"
+		:tmin=="0"?"blob"
+		:"blob"
+	]())
 	.then(fun);
 }
 function mostrar_descomprimido(x){
 	document.querySelector("#info_descomprimida").value = x
 }
-function mostrar_comprimido_y_descomprimir(x){
-	document.querySelector("#base64_comprimido").innerHTML = x
-	descargar("bz_post_descomprimir.php",x,mostrar_descomprimido)
+function p_1(x){
+	document.querySelector("#base64_comprimido").value = x
+	descargar("post/descomprimir_y_mostrar_raw.php","text",x,mostrar_descomprimido)
 }
 function enviar_datos(){
 	var info = document.querySelector("#info").value
-	descargar("bz_post_b64.php",info,mostrar_comprimido_y_descomprimir)
+	descargar("post/comprimir_y_mostrar_base64.php","text",info,p_1)
 }
