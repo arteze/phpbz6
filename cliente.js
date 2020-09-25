@@ -6,15 +6,14 @@ function descargar(url,info,fun){
 	}).then(x=>x.text())
 	.then(fun);
 }
+function mostrar_descomprimido(x){
+	document.querySelector("#info_descomprimida").value = x
+}
+function mostrar_comprimido_y_descomprimir(x){
+	document.querySelector("#base64_comprimido").innerHTML = x
+	descargar("bz_post_descomprimir.php",x,mostrar_descomprimido)
+}
 function enviar_datos(){
 	var info = document.querySelector("#info").value
-	function fun(x){
-		var info = x
-		document.querySelector("#base64_comprimido").innerHTML = x
-		function fun(x){
-			document.querySelector("#info_descomprimida").value = x
-		}
-		descargar("bz_post_descomprimir.php",info,fun)
-	}
-	descargar("bz_post_b64.php",info,fun)
+	descargar("bz_post_b64.php",info,mostrar_comprimido_y_descomprimir)
 }
